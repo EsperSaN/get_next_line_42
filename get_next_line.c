@@ -2,6 +2,21 @@
 
 //--------------------------------- [UTILL] ----------------------------------//
 
+int wait_i_have_a_reason(char *hermem)
+{
+  printf("\n -----------CHECK------------\n > %s <\n", hermem);
+  while(*hermem)
+  {
+    if(*hermem == '\n')
+    {
+      printf("\n ------------------- WAIT WAIT LISTEN TO ME I HAVE REASON ----------------");
+      return(0);
+    }
+    hermem++;
+  }
+  printf("-----------------PASS!!!!-----------\n");
+  return(1);
+}
 char *search_for_the_lie(int fd, char *hermem)
 {
   char *buffer;
@@ -18,10 +33,10 @@ char *search_for_the_lie(int fd, char *hermem)
   else
     return(0);
   
-  while(read(fd, buffer, BUFFER_SIZE)) // just read !!!!! <-------- must be add the \n checker later
+  while(wait_i_have_a_reason(hermem) && read(fd, buffer, BUFFER_SIZE)) // just read !!!!! <-------- must be add the \n checker later
   {
     tmp = hermem;
-    printf("\nbefore join buffer is %s \nhermem is %s" , buffer,hermem);
+    printf("\nbefore join the 'buffer' is > %s < \nhermem is > %s <" , buffer,hermem);
     hermem = ft_strjoin(hermem, buffer);
     free(tmp);
   }
@@ -33,12 +48,12 @@ char *search_for_the_lie(int fd, char *hermem)
 
 char *get_next_lie(char *hermem)
 {
-
+  return 0;
 }
 
 char *ready_for_next_lie(char *hermem)
 {
-
+  return 0;
 }
 
 char *get_next_line(int fd)
@@ -51,7 +66,7 @@ char *get_next_line(int fd)
     return(0);
   hermem = search_for_the_lie(fd , hermem); // do the read function until found the \n in the line and return
   // return null if cant malloc or error
-  printf("\nhemem is '%s'\n exit...", hermem);
+  printf("\nhermem is '%s'\n exit...", hermem);
   if(!hermem)
     return (0);
   
@@ -66,14 +81,14 @@ int main()
 {	
   int fd = open("./test", O_RDONLY);
   char *sumstr ;
-  int i = 10;
+  int i = 5;
   while(i)
   {
-    printf("--------------------[%d]-----------------\n", i);
+    printf("\n--------------------------------------------------------------------------[%d]---------------------------------------------------------\n", i);
     sumstr = get_next_line(fd);
     
 	  printf("final is \n%s", sumstr);
-    printf("--------------------------------------\n");
+    printf("\n-----------------------------------------------------------------------------------------------------------------------------------------\n");
     i--;
   }
 
