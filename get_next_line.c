@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pruenrua <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: pruenrua <pruenrua@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 19:58:37 by pruenrua          #+#    #+#             */
-/*   Updated: 2023/01/08 19:58:43 by pruenrua         ###   ########.fr       */
+/*   Updated: 2023/01/08 23:46:16 by pruenrua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,12 @@ char	*read_until_newline(int	fd, char	*st_mem)
 	{
 		st_mem = (char *)malloc(1 * sizeof(char));
 		st_mem[0] = '\0';
+		printf("[ MALLOC 1st]\n");
 	}
 	if (!st_mem)
 		return (0);
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	printf("[ MALLOC BUFFER]\n");
 	if (!buffer)
 		return (0);
 	buffer[BUFFER_SIZE] = '\0';
@@ -60,17 +62,26 @@ char	*read_until_newline(int	fd, char	*st_mem)
 	while (read_counter)
 	{
 		read_counter = read(fd, buffer, BUFFER_SIZE);
-		if (read_counter <= 0)
+		printf("[ READED ]\n");
+		if (read_counter == -1) //adjust it 
 		{
+			printf("[ READ IS < 0]\n");
 			free(st_mem);
 			free(buffer);
 			return (0);
 		}
 		tmp = st_mem;
+		printf("[ join [%s] with [%s] ]\n", st_mem , buffer);
 		st_mem = ft_strjoin(st_mem, buffer);
+		printf("[ JoinNED with result > [%s] ]\n", st_mem);
 		free(tmp);
+		printf("[ free BUFF]\n");
+		printf("[ TO CHECKER]\n");
 		if (!newline_checker(st_mem))
+		{
+			printf("[ found 'n']\n");
 			break;
+		}
 	}
 	free(buffer);
 	return (st_mem);
@@ -107,16 +118,21 @@ char	*del_oldline_and_move_to_next_line(char *st_mem)
 	j = 0;
 	if (!st_mem)
 		return (0);
-	while (st_mem[i])
+	while (st_mem[i] && st_mem[i] != '\n')
 	{
-		if (st_mem[i] == '\n')
-		{
-			i++;
-			break;
-		}
+		// if (st_mem[i] == '\n')
+		// {
+		// 	i++;
+		// 	break;
+		// }
 		i++;
 	}
-	result = (char *)malloc(ft_strlen(&st_mem[i]) + 1);
+	if (!st_mem[i++])
+	{
+		free(st_mem);
+		return (0);	
+	}
+	result = (char *)malloc(ft_strlen(&st_mem[i++]) + 1);
 	result[ft_strlen(&st_mem[i])] = '\0';
 	while(st_mem[i])
 	{
@@ -136,13 +152,16 @@ char	*get_next_line(int	fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
 	st_mem = read_until_newline(fd, st_mem);
+	printf("---------- READ FIN WITH ---------\n [%s] \n ----------^ in the st_mem ------------\n", st_mem);
 	if (!st_mem)
 		return (0);
 	output = copy_line_to_output(st_mem);
+	printf("---------- COPY ---------\n");
 	st_mem = del_oldline_and_move_to_next_line(st_mem);
+	printf("---------- MOVE ---------");
 	return (output);
 }
-/*
+
 //--------------------------------- [MAIN] ----------------------------------//
 int main()
 {	
@@ -151,14 +170,12 @@ int main()
   int i = 10;
   while(i)
   {
-    printf("\n--------------------------------------------------------------------------[%d]---------------------------------------------------------\n", i);
+    // printf("\n--------------------------------------------------------------------------[%d]---------------------------------------------------------\n", i);
     sumstr = get_next_line(fd);
-    
-	  printf("final is \n { %s }", sumstr);
-    printf("\n-----------------------------------------------------------------------------------------------------------------------------------------\n");
+	printf("///////// final is { %s } ////////////", sumstr);
+    // printf("\n-----------------------------------------------------------------------------------------------------------------------------------------\n");
     i--;
     free(sumstr);
   }
 
 }
-*/
