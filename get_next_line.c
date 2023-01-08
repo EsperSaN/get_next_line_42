@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pruenrua <pruenrua@student.42bangkok.co    +#+  +:+       +#+        */
+/*   By: pruenrua <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/08 17:37:08 by pruenrua          #+#    #+#             */
-/*   Updated: 2023/01/08 19:42:58 by pruenrua         ###   ########.fr       */
+/*   Created: 2023/01/08 19:58:37 by pruenrua          #+#    #+#             */
+/*   Updated: 2023/01/08 19:58:43 by pruenrua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ char	*get_next_line(int	fd)
 	st_mem = del_oldline_and_move_to_next_line(st_mem);
 	return (output);
 }
-
+/*
 //--------------------------------- [MAIN] ----------------------------------//
 int main()
 {	
@@ -161,3 +161,4 @@ int main()
   }
 
 }
+*/
