@@ -1,183 +1,147 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pruenrua <pruenrua@student.42bangkok.co    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/08 17:37:08 by pruenrua          #+#    #+#             */
+/*   Updated: 2023/01/08 19:42:58 by pruenrua         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-//--------------------------------- [UTILL] ----------------------------------//
-
-int wait_i_have_a_reason(char *hermem)
+size_t	newline_checker(char	*str)
 {
-  printf("\n -----------CHECK------------\n > %s <\n", hermem);
-  
-  while(*hermem)
-  {
-    if(*hermem == '\n')
-    {
-  
-      printf("\n ------------------- WAIT WAIT LISTEN TO ME I HAVE REASON ----------------");
-  
-      return(0);
-    }
-    hermem++;
-  }
-  
-  printf("-----------------PASS!!!!-----------\n");
-  
-  return(1);
+	while (*str)
+	{
+		if (*str == '\n')
+			return(0);
+		str++; 
+	}
+	return (1);
 }
 
-int	did_n_word(char *hermem)
+size_t	count_untill_newline(char	*str)
 {
-  int i;
+	int	i;
 
-  i = 0;
-  if(!hermem)
-    return(0);
-  while(*hermem)
-  {
-    if(*hermem == '\n')
-      break;
-    i++;
-    hermem++;
-  }
-  return(i);
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == '\n')
+			break;
+		i++;
+	}
+	return (i);
 }
 
-char *search_for_the_lie(int fd, char *hermem)
+char	*read_until_newline(int	fd, char	*st_mem)
 {
-  char *buffer;
-  char *tmp;
-  int	i_remember_that;
-  
-  if(!hermem) //create the mem if not valid that can use in strjoin function
-    hermem = malloc(1 * sizeof(char));
-  
-  if(!hermem)
-    return(printf("\ni cant malloc----------------------- "));
-  
-  buffer = malloc(BUFFER_SIZE + 1 * sizeof(char));
-  
-  if(!buffer)
-    return(0);
-  
-  buffer[BUFFER_SIZE] = '\0';
-  
-  i_remember_that = 1; // 1 for start in read
+	char	*buffer;
+	char	*tmp;
+	int	read_counter;
 
-  // || have to move condition bolow there due the nominent
-  // the old is 'while(wait_i_have_a_reason(hermem) && read(fd, buffer, BUFFER_SIZE))'
-  while(i_remember_that) // have to write the case that if read -1 at the first or neither the read 0 mean end
-  {
-    i_remember_that = read(fd ,buffer, BUFFER_SIZE); // if this value > 0 mean it can read
-    
-    if(i_remember_that <= 0)
-    {
-      printf("\n ////////////////////////// finish or error /////////////////////// \n");
-      free(hermem); // is it ness??
-      free(buffer);
-      return(0);
-    }
-
-    tmp = hermem;
-    
-    printf("\nbefore join the 'buffer' is > %s < \nhermem is > %s <" , buffer,hermem);
-    
-    hermem = ft_strjoin(hermem, buffer);
-    free(tmp);
-
-    if(!wait_i_have_a_reason(hermem))
-      break;
-  }
-  
-  free(buffer);
-
-  return(hermem);
-  
+	if (!st_mem)
+	{
+		st_mem = (char *)malloc(1 * sizeof(char));
+		st_mem[0] = '\0';
+	}
+	if (!st_mem)
+		return (0);
+	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (0);
+	buffer[BUFFER_SIZE] = '\0';
+	read_counter = 1;
+	while (read_counter)
+	{
+		read_counter = read(fd, buffer, BUFFER_SIZE);
+		if (read_counter <= 0)
+		{
+			free(st_mem);
+			free(buffer);
+			return (0);
+		}
+		tmp = st_mem;
+		st_mem = ft_strjoin(st_mem, buffer);
+		free(tmp);
+		if (!newline_checker(st_mem))
+			break;
+	}
+	free(buffer);
+	return (st_mem);
 }
 
-
-char *get_next_lie(char *hermem) // use for get the line to the result to output 
+char	*copy_line_to_output(char	*st_mem)
 {
-  char *to_return;
-  int	how_long;
-  int	i;
+	char	*result;
+	size_t	lenght_of_result;
+	size_t	i;
 
-  i = 0;
-
- if(!hermem)
-    return(0);
-
-  how_long = did_n_word(hermem);
-
-  printf("\n -------- I malloc {%d} + 1 PAPA ---------- \n" , how_long);
-
-  to_return = malloc(how_long + 1); // this thing have to free by user
-
-  to_return[how_long] = '\0';
-
-  while(how_long && hermem[i]) // to prevent the 1 size str that only contain \0 
-  {
-    to_return[i] = hermem[i];
-    i++;
-    how_long--;
-  }
-
-  return (to_return);
+	i = 0;
+	if (!st_mem)
+		return (0);
+	lenght_of_result = count_untill_newline(st_mem);
+	result = (char *)malloc((lenght_of_result + 1) * sizeof(char));
+	result[lenght_of_result] = '\0';
+	while (lenght_of_result && st_mem[i])
+	{
+		result[i] = st_mem[i];
+		i++;
+		lenght_of_result--;
+	}
+	return (result);
 }
 
-char *ready_for_next_lie(char *hermem)
+char	*del_oldline_and_move_to_next_line(char *st_mem)
 {
-  int i;
-  int	j;
-  char	*tmp;
+	size_t	i;
+	size_t	j;
+	char	*result;
 
-  i = 0;
-  j = 0;
-  if(!hermem)
-    return(0);
-
-  while(hermem[i])
-  {
-    if(hermem[i] == '\n')
-    {
-      i++;
-      break;
-    }
-    i++;
-  }
-  tmp = malloc(ft_strlen(&hermem[i]) + 1);
-  tmp[ft_strlen(&hermem[i])] = '\0';
-
-  while(hermem[i])
-  {
-    tmp[j] = hermem[i];
-    i++;
-    j++;
-  }
-  free(hermem);
-  return (tmp);
+	i = 0;
+	j = 0;
+	if (!st_mem)
+		return (0);
+	while (st_mem[i])
+	{
+		if (st_mem[i] == '\n')
+		{
+			i++;
+			break;
+		}
+		i++;
+	}
+	result = (char *)malloc(ft_strlen(&st_mem[i]) + 1);
+	result[ft_strlen(&st_mem[i])] = '\0';
+	while(st_mem[i])
+	{
+		result[j] = st_mem[i];
+		i++;
+		j++;
+	}
+	free(st_mem);
+	return (result);
 }
 
-char *get_next_line(int fd) //------for the malloc there is still leak when read is not -1 or 0 so that mean when call the function that read donst end it will leake at static // the return is user free
-
+char	*get_next_line(int	fd)
 {
-  static char *hermem;
-  char *result;
-  
-  printf("start with BUFFERSIZE > %d \n", BUFFER_SIZE);
-  
-  if(fd < 0 || BUFFER_SIZE <= 0)
-    return(0);
-  hermem = search_for_the_lie(fd , hermem); // do the read function until found the \n in the line and return
-  
-  
-  printf("\nhermem is '%s'\n exit...", hermem);
-  
-  if(!hermem) // return null if cant malloc or error
-    return (0);
-  
-  result = get_next_lie(hermem); //get the thing before \n to it malloc also
-  hermem = ready_for_next_lie(hermem); //move to after \n free old and malloc after it
-  return(result);
-}
+	static char	*st_mem;
+	char	*output;
 
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
+	st_mem = read_until_newline(fd, st_mem);
+	if (!st_mem)
+		return (0);
+	output = copy_line_to_output(st_mem);
+	st_mem = del_oldline_and_move_to_next_line(st_mem);
+	return (output);
+}
 
 //--------------------------------- [MAIN] ----------------------------------//
 int main()
