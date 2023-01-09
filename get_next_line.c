@@ -32,10 +32,13 @@ size_t	count_untill_newline(char	*str)
 		return (0);
 	while (str[i])
 	{
+		i++;
+		printf("\n %c count %d", str[i],i);
 		if (str[i] == '\n')
 			break;
-		i++;
+		
 	}
+	i++; //>> return COUNT not INDEX
 	return (i);
 }
 
@@ -108,7 +111,9 @@ char	*copy_line_to_output(char	*st_mem)
 	i = 0;
 	if (!st_mem)
 		return (0);
-	lenght_of_result = count_untill_newline(st_mem);
+	printf("\n[copy-line-to-output]\n");
+	lenght_of_result = count_untill_newline(st_mem); // <-- fix to output with \n
+	printf("lenght is [%d] stlen is %d\n", lenght_of_result,ft_strlen(st_mem));
 	result = (char *)malloc((lenght_of_result + 1) * sizeof(char));
 	result[lenght_of_result] = '\0';
 	while (lenght_of_result && st_mem[i])
@@ -168,9 +173,9 @@ char	*get_next_line(int	fd)
 	if (!st_mem)
 		return (0);
 	output = copy_line_to_output(st_mem);
-	printf("---------- COPY ---------\n");
+	printf("---------- COPY OUTPUT IS [%s] ---------\n", output);
 	st_mem = del_oldline_and_move_to_next_line(st_mem);
-	printf("---------- MOVE ---------");
+	printf("---------- MOVE ---------\n");
 	return (output);
 }
 
