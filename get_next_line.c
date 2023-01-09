@@ -59,17 +59,29 @@ char	*read_until_newline(int	fd, char	*st_mem)
 		return (0);
 	buffer[BUFFER_SIZE] = '\0';
 	read_counter = 1;
-	while (read_counter)
+	while (read_counter > 0)
 	{
 		read_counter = read(fd, buffer, BUFFER_SIZE);
-		printf("[ READED ]\n");
+		printf("[ READED with read_count = %d ]\n", read_counter);
+		if(read_counter == 0) // if fin reading just stop -> free (buff) -> return
+			break;
 		if (read_counter == -1) //adjust it 
 		{
-			printf("[ READ IS < 0]\n");
+			printf("[ READ IS == %d]\n" , read_counter);
 			free(st_mem);
 			free(buffer);
 			return (0);
 		}
+		buffer[read_counter] = '\0'; // add this to prevent the read that read can read 1 and replace just 1 position and lefe te rest from recent loop 
+		/*  BEFORE FIX
+		[ READED with read_count = 1 ] <-- this mean read can read just 1 char and put it in first index [0] ;																																									| strjoin should cut here											
+		[ join [0123456789012345678901234567890123456789] with [0789] ] <-- but the join will read until \0 and join so we must protech the buffer just what it can read now so we want just [0] so we protech that by add \0 to the next index after read byte so that would be 0'\0'789
+		[ JoinNED with result > [01234567890123456789012345678901234567890789] ]
+		AFTER FIX 
+		[ READED with read_count = 1 ]
+		[ join [0123456789012345678901234567890123456789] with [0] ] these change
+		[ JoinNED with result > [01234567890123456789012345678901234567890] ]	
+		*/
 		tmp = st_mem;
 		printf("[ join [%s] with [%s] ]\n", st_mem , buffer);
 		st_mem = ft_strjoin(st_mem, buffer);
@@ -167,10 +179,11 @@ int main()
 {	
   int fd = open("./test", O_RDONLY);
   char *sumstr ;
-  int i = 10;
+  int i = 1;
   while(i)
   {
-    // printf("\n--------------------------------------------------------------------------[%d]---------------------------------------------------------\n", i);
+
+    printf("\n--------------------------------------------------------------------------[%d]---------------------------------------------------------\n", i);
     sumstr = get_next_line(fd);
 	printf("///////// final is { %s } ////////////", sumstr);
     // printf("\n-----------------------------------------------------------------------------------------------------------------------------------------\n");
