@@ -94,7 +94,7 @@ char	*read_until_newline(int	fd, char	*st_mem)
 		// printf("[ TO CHECKER]\n");
 		if (!newline_checker(st_mem))
 		{
-			printf("[ found 'n']\n");
+			// printf("[ found 'n']\n");
 			break;
 		}
 	}
@@ -174,7 +174,7 @@ char	*get_next_line(int	fd)
 	if (!st_mem)
 		return (0);
 	output = copy_line_to_output(st_mem);
-	// printf("---------- COPY OUTPUT IS [%s] ---------\n", output);
+	printf("\n---------- COPY OUTPUT IS [%s] ---------\n", output);
 	st_mem = del_oldline_and_move_to_next_line(st_mem);
 	// printf("---------- MOVE ---------\n");
 	return (output);
