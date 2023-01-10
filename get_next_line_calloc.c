@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_with_calloc.c                        :+:      :+:    :+:   */
+/*   get_next_line_calloc.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pruenrua <pruenrua@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 19:58:37 by pruenrua          #+#    #+#             */
-/*   Updated: 2023/01/10 20:05:31 by pruenrua         ###   ########.fr       */
+/*   Updated: 2023/01/10 20:11:01 by pruenrua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,12 @@ char	*read_until_newline(int	fd, char	*st_mem)
 	int	read_counter;
 
 	if (!st_mem)
-	{
 		st_mem = (char *)calloc(1, sizeof(char));
-		// st_mem[0] = '\0';
-	}
 	if (!st_mem)
 		return (0);
 	buffer = (char *)calloc((BUFFER_SIZE + 1), sizeof(char));
 	if (!buffer)
 		return (0);
-	// buffer[BUFFER_SIZE] = '\0';
 	read_counter = 1;
 	while (read_counter > 0)
 	{
@@ -94,7 +90,6 @@ char	*copy_line_to_output(char	*st_mem)
 		return (0);
 	lenght_of_result = count_untill_newline(st_mem);
 	result = (char *)calloc((lenght_of_result + 1), sizeof(char));
-	// result[lenght_of_result] = '\0';
 	while (lenght_of_result > 0 && st_mem[i] != '\0')
 	{
 		result[i] = st_mem[i];
@@ -122,7 +117,6 @@ char	*del_oldline_and_move_to_next_line(char *st_mem)
 		return (0);	
 	}
 	result = (char *)calloc(ft_strlen(&st_mem[i++]) + 1 , sizeof(char)); //<-----
-	// result[ft_strlen(&st_mem[i])] = '\0';
 	while(st_mem[i])
 	{
 		result[j] = st_mem[i];
