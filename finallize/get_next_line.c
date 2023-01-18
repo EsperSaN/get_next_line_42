@@ -6,7 +6,7 @@
 /*   By: pruenrua <pruenrua@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:44:41 by pruenrua          #+#    #+#             */
-/*   Updated: 2023/01/18 15:56:23 by pruenrua         ###   ########.fr       */
+/*   Updated: 2023/01/18 17:10:18 by pruenrua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,14 @@ char	*read_until_newline(int fd, char *st_mem)
 	char	*tmp;
 	int		read_counter;
 
-	if (!st_mem)
-	{
-		st_mem = (char *)malloc(1 * sizeof(char));
-		st_mem[0] = '\0';
-	}
-	if (!st_mem)
-		return (0);
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (0);
 	buffer[BUFFER_SIZE] = '\0';
 	read_counter = 1;
-	while (read_counter > 0)
+	while (newline_checker(st_mem) && read_counter > 0)
 	{
 		read_counter = read(fd, buffer, BUFFER_SIZE);
-		if (read_counter == 0)
-			break ;
 		if (read_counter == -1)
 		{
 			free(st_mem);
@@ -64,8 +55,6 @@ char	*read_until_newline(int fd, char *st_mem)
 		tmp = st_mem;
 		st_mem = ft_strjoin(st_mem, buffer);
 		free(tmp);
-		if (!newline_checker(st_mem))
-			break ;
 	}
 	free(buffer);
 	return (st_mem);
@@ -127,6 +116,13 @@ char	*get_next_line(int fd)
 	char		*output;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
+	if (!st_mem)
+	{
+		st_mem = (char *)malloc(1 * sizeof(char));
+		st_mem[0] = '\0';
+	}
+	if (!st_mem)
 		return (0);
 	st_mem = read_until_newline(fd, st_mem);
 	if (!st_mem)
