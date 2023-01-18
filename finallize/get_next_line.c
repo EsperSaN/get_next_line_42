@@ -5,25 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pruenrua <pruenrua@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/08 19:58:37 by pruenrua          #+#    #+#             */
-/*   Updated: 2023/01/18 15:32:18 by pruenrua         ###   ########.fr       */
+/*   Created: 2023/01/18 15:44:41 by pruenrua          #+#    #+#             */
+/*   Updated: 2023/01/18 15:56:23 by pruenrua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	newline_checker(char	*str)
-{
-	while (*str)
-	{
-		if (*str == '\n')
-			return(0);
-		str++; 
-	}
-	return (1);
-}
-
-size_t	count_untill_newline(char	*str)
+size_t	count_untill_newline(char *str)
 {
 	int	i;
 
@@ -32,21 +21,21 @@ size_t	count_untill_newline(char	*str)
 		return (0);
 	while (str[i])
 	{
-		if (str[i] == '\n') /// BIG BUG <<=============
+		if (str[i] == '\n')
 		{
 			i++;
-			break;
+			break ;
 		}
-		i++;	
+		i++;
 	}
 	return (i);
 }
 
-char	*read_until_newline(int	fd, char	*st_mem)
+char	*read_until_newline(int fd, char *st_mem)
 {
 	char	*buffer;
 	char	*tmp;
-	int	read_counter;
+	int		read_counter;
 
 	if (!st_mem)
 	{
@@ -63,27 +52,26 @@ char	*read_until_newline(int	fd, char	*st_mem)
 	while (read_counter > 0)
 	{
 		read_counter = read(fd, buffer, BUFFER_SIZE);
-		if(read_counter == 0)
-			break;
+		if (read_counter == 0)
+			break ;
 		if (read_counter == -1)
 		{
 			free(st_mem);
 			free(buffer);
 			return (0);
 		}
-		buffer[read_counter] = '\0'; 
-		
+		buffer[read_counter] = '\0';
 		tmp = st_mem;
 		st_mem = ft_strjoin(st_mem, buffer);
 		free(tmp);
 		if (!newline_checker(st_mem))
-			break;
+			break ;
 	}
 	free(buffer);
 	return (st_mem);
 }
 
-char	*copy_line_to_output(char	*st_mem)
+char	*copy_line_to_output(char *st_mem)
 {
 	char	*result;
 	size_t	lenght_of_result;
@@ -119,11 +107,11 @@ char	*del_oldline_and_move_to_next_line(char *st_mem)
 	if (!st_mem[i])
 	{
 		free(st_mem);
-		return (0);	
+		return (0);
 	}
 	result = (char *)malloc(ft_strlen(&st_mem[i++]) + 1);
 	result[ft_strlen(&st_mem[i])] = '\0';
-	while(st_mem[i])
+	while (st_mem[i])
 	{
 		result[j] = st_mem[i];
 		i++;
@@ -133,10 +121,10 @@ char	*del_oldline_and_move_to_next_line(char *st_mem)
 	return (result);
 }
 
-char	*get_next_line(int	fd)
+char	*get_next_line(int fd)
 {
 	static char	*st_mem;
-	char	*output;
+	char		*output;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (0);
@@ -147,22 +135,3 @@ char	*get_next_line(int	fd)
 	st_mem = del_oldline_and_move_to_next_line(st_mem);
 	return (output);
 }
-
-// //--------------------------------- [MAIN] ----------------------------------//
-// int main()
-// {	
-//   int fd = open("./test", O_RDONLY);
-//   char *sumstr ;
-//   int i = 2;
-//   while(i)
-//   {
-
-//     printf("\n--------------------------------------------------------------------------[%d]---------------------------------------------------------\n", i);
-//     sumstr = get_next_line(fd);
-// 	printf("///////// final is { %s } ////////////", sumstr);
-//     printf("\n-----------------------------------------------------------------------------------------------------------------------------------------\n");
-//     i--;
-//     free(sumstr);
-//   }
-
-// }

@@ -5,12 +5,23 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pruenrua <pruenrua@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/08 19:58:52 by pruenrua          #+#    #+#             */
-/*   Updated: 2023/01/18 15:31:48 by pruenrua         ###   ########.fr       */
+/*   Created: 2023/01/18 15:44:10 by pruenrua          #+#    #+#             */
+/*   Updated: 2023/01/18 15:50:43 by pruenrua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+int	newline_checker(char *str)
+{
+	while (*str)
+	{
+		if (*str == '\n')
+			return (0);
+		str++;
+	}
+	return (1);
+}
 
 size_t	ft_strlen(const char *s)
 {
