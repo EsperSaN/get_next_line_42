@@ -112,7 +112,7 @@ char	*del_oldline_and_move_to_next_line(char *st_mem)
 
 char	*get_next_line(int fd)
 {
-	static char	*st_mem[4096];
+	static char	*st_mem[256];
 	char		*output;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
