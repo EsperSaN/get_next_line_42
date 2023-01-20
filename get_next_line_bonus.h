@@ -6,7 +6,7 @@
 /*   By: pruenrua <pruenrua@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:41:48 by pruenrua          #+#    #+#             */
-/*   Updated: 2023/01/20 15:45:17 by pruenrua         ###   ########.fr       */
+/*   Updated: 2023/01/20 16:19:41 by pruenrua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <limits.h>
 
 int		newline_checker(char *str);
 size_t	count_untill_newline(char *str);

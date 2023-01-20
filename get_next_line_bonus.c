@@ -6,7 +6,7 @@
 /*   By: pruenrua <pruenrua@student.42bangkok.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/18 15:44:41 by pruenrua          #+#    #+#             */
-/*   Updated: 2023/01/20 15:45:04 by pruenrua         ###   ########.fr       */
+/*   Updated: 2023/01/20 16:19:53 by pruenrua         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ char	*del_oldline_and_move_to_next_line(char *st_mem)
 
 char	*get_next_line(int fd)
 {
-	static char	*st_mem[256];
+	static char	*st_mem[OPEN_MAX];
 	char		*output;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
