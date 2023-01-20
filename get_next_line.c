@@ -122,10 +122,10 @@ char	*get_next_line(int fd)
 	if (!st_mem)
 	{
 		st_mem = (char *)malloc(1 * sizeof(char));
+		if (!st_mem)
+			return (0);
 		st_mem[0] = '\0';
 	}
-	if (!st_mem)
-		return (0);
 	st_mem = read_until_newline(fd, st_mem);
 	if (!st_mem)
 		return (0);
