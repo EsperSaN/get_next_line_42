@@ -99,6 +99,8 @@ char	*del_oldline_and_move_to_next_line(char *st_mem)
 		return (0);
 	}
 	result = (char *)malloc(ft_strlen(&st_mem[i++]) + 1);
+	if (!result)
+		return (0);
 	result[ft_strlen(&st_mem[i])] = '\0';
 	while (st_mem[i])
 	{
@@ -115,15 +117,15 @@ char	*get_next_line(int fd)
 	static char	*st_mem[OPEN_MAX];
 	char		*output;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || fd > OPEN_MAX)
 		return (0);
 	if (!st_mem[fd])
 	{
 		st_mem[fd] = (char *)malloc(1 * sizeof(char));
+		if (!st_mem[fd])
+			return (0);
 		st_mem[fd][0] = '\0';
 	}
-	if (!st_mem[fd])
-		return (0);
 	st_mem[fd] = read_until_newline(fd, st_mem[fd]);
 	if (!st_mem[fd])
 		return (0);
