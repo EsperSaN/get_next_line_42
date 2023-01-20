@@ -99,6 +99,8 @@ char	*del_oldline_and_move_to_next_line(char *st_mem)
 		return (0);
 	}
 	result = (char *)malloc(ft_strlen(&st_mem[i++]) + 1);
+	if (!result)
+		return(0);
 	result[ft_strlen(&st_mem[i])] = '\0';
 	while (st_mem[i])
 	{
